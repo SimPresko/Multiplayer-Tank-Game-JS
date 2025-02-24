@@ -1,9 +1,14 @@
 body {
   background-color: aquamarine;
   margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 .gameCanvas {
+  display: block;
   background-color: blueviolet;
-  width: 30vw;
-  height: 30vh;
+  margin: auto;
+  border: 5px solid black;
 }

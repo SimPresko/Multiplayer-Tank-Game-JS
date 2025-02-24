@@ -7,7 +7,12 @@
     <title>Tank</title>
   </head>
   <body>
-    <canvas id="gameCanvas" class="gameCanvas"></canvas>
+    <canvas
+      id="gameCanvas"
+      width="900"
+      height="600"
+      class="gameCanvas"
+    ></canvas>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -15,21 +20,33 @@
       const canvas = document.getElementById('gameCanvas')
       const context = canvas.getContext('2d')
 
+      let keysPressed = {}
+
       document.addEventListener('keydown', (event) => {
+        if (!keysPressed[event.key]) {
+          keysPressed[event.key] = true
+          socket.emit('keyState', keysPressed)
+        }
         if (event.key === 'ArrowUp' || event.key === 'w')
-          socket.emit('move', { dx: 0, dy: -10 })
+          socket.emit('move', { dir: 'u' })
         if (event.key === 'ArrowDown' || event.key === 's')
-          socket.emit('move', { dx: 0, dy: 10 })
+          socket.emit('move', { dir: 'd' })
         if (event.key === 'ArrowLeft' || event.key === 'a')
-          socket.emit('move', { dx: -10, dy: 0 })
+          socket.emit('move', { dir: 'l' })
         if (event.key === 'ArrowRight' || event.key === 'd')
-          socket.emit('move', { dx: 10, dy: 0 })
+          socket.emit('move', { dir: 'r' })
       })
+
+      document.addEventListener('keyup', (event) => {
+        delete keysPressed[event.key]
+        socket.emit('keyState', keysPressed)
+      })
+
       socket.on('state', (players) => {
         context.clearRect(0, 0, canvas.width, canvas.height)
         for (let id in players) {
           const player = players[id]
-          context.fillRect(player.x, player.y, 30, 30)
+          context.fillRect(player.x, player.y, 20, 20)
         }
       })
     </script>
