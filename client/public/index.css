@@ -1,0 +1,9 @@
+body {
+  background-color: aquamarine;
+  margin: 0;
+}
+.gameCanvas {
+  background-color: blueviolet;
+  width: 30vw;
+  height: 30vh;
+}

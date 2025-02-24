@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/index.css" />
+    <title>Tank</title>
+  </head>
+  <body>
+    <canvas id="gameCanvas" class="gameCanvas"></canvas>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io()
+      const canvas = document.getElementById('gameCanvas')
+      const context = canvas.getContext('2d')
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowUp' || event.key === 'w')
+          socket.emit('move', { dx: 0, dy: -10 })
+        if (event.key === 'ArrowDown' || event.key === 's')
+          socket.emit('move', { dx: 0, dy: 10 })
+        if (event.key === 'ArrowLeft' || event.key === 'a')
+          socket.emit('move', { dx: -10, dy: 0 })
+        if (event.key === 'ArrowRight' || event.key === 'd')
+          socket.emit('move', { dx: 10, dy: 0 })
+      })
+      socket.on('state', (players) => {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        for (let id in players) {
+          const player = players[id]
+          context.fillRect(player.x, player.y, 30, 30)
+        }
+      })
+    </script>
+  </body>
+</html>
